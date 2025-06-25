@@ -24,86 +24,84 @@
 # The Game of Fifteen (Tic-Tac-Toe) solver
 
 
-def resolve_problem_brute_force():
-    '''
-    Start the interactions
-    The matrix is processed as array, for example:
+def solve_brute_force():
+    """Brute force search for 3x3 magic squares.
 
-    276951438
-    =
-    2 7 6
-    9 5 1
-    4 3 8
-    '''
-    perc_completed = 0
+    The matrix is represented as a single array. For instance, the number
+    ``276951438`` corresponds to the matrix::
+
+        2 7 6
+        9 5 1
+        4 3 8
+    """
+
+    percent_completed = 0
     # 123456789
     for x in range(276543801, 987654321):
-        array = return_array_if_valid(x)
-        if(array):
-            if assert_result_array(array):
-                print_result(array)
+        digits = digits_if_valid(x)
+        if digits:
+            if is_solution(digits):
+                print_result(digits)
             else:
-                perc_current = int(x * 100 / 987654321)
-                if perc_completed != perc_current:
-                    print(str(perc_current) + "% (" + str(x) + ")")
-                perc_completed = perc_current
+                percent_current = int(x * 100 / 987654321)
+                if percent_completed != percent_current:
+                    print(f"{percent_current}% ({x})")
+                percent_completed = percent_current
 
 
-def return_array_if_valid(number):
+def digits_if_valid(number):
+    """Return a list with the digits of ``number`` if they are all unique."""
 
-    strnu = str(number)
-    vl = {}
+    number_str = str(number)
+    digits = {}
     for x in range(0, 9):
-        ch = strnu[x]
-        vl[ch] = ch
+        ch = number_str[x]
+        digits[ch] = ch
 
-    if len(vl) == 9:
-        return list(vl.values())
-    else:
-        return None
+    if len(digits) == 9:
+        return list(digits.values())
+    return None
 
 
-def assert_result_array(array):
+def is_solution(array):
 
     # Horizontal
-    if not assert_array_pos(array, 0, 1, 2):
+    if not check_positions(array, 0, 1, 2):
         return False
 
-    if not assert_array_pos(array, 3, 4, 5):
+    if not check_positions(array, 3, 4, 5):
         return False
 
-    if not assert_array_pos(array, 6, 7, 8):
+    if not check_positions(array, 6, 7, 8):
         return False
 
     # Vertical
-    if not assert_array_pos(array, 0, 3, 6):
+    if not check_positions(array, 0, 3, 6):
         return False
 
-    if not assert_array_pos(array, 1, 4, 7):
+    if not check_positions(array, 1, 4, 7):
         return False
 
-    if not assert_array_pos(array, 2, 5, 8):
+    if not check_positions(array, 2, 5, 8):
         return False
 
     # Diagonal
-    if not assert_array_pos(array, 0, 4, 8):
+    if not check_positions(array, 0, 4, 8):
         return False
 
-    if not assert_array_pos(array, 2, 4, 6):
+    if not check_positions(array, 2, 4, 6):
         return False
 
     return True
 
 
-def assert_three(vl1, vl2, vl3):
-    '''
-    Sum of the values must be 15
-    '''
-    return vl1 + vl2 + vl3 == 15
+def sum_is_fifteen(v1, v2, v3):
+    """Return ``True`` if the three numbers add up to 15."""
+    return v1 + v2 + v3 == 15
 
 
-def assert_array_pos(array, p1, p2, p3):
-    return assert_three(int(array[p1]), int(array[p2]), int(array[p3]))
+def check_positions(array, p1, p2, p3):
+    return sum_is_fifteen(int(array[p1]), int(array[p2]), int(array[p3]))
 
 
 def print_result(array):
@@ -114,4 +112,4 @@ def print_result(array):
 
 
 if __name__ == '__main__':
-    resolve_problem_brute_force()
+    solve_brute_force()
